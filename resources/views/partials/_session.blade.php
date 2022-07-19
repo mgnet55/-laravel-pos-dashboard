@@ -3,9 +3,9 @@
     <script>
         new Noty({
             type: 'success',
-            layout: 'topRight',
+            layout: 'topCenter',
             text: "{{ session('success') }}",
-            timeout: 2000,
+            timeout: 1500,
             killer: true
         }).show();
     </script>

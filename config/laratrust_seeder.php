@@ -12,24 +12,16 @@ return [
     'truncate_tables' => true,
 
     'roles_structure' => [
+        'super-admin' => [
+            'admins' => 'c,r,u,d',
+            'categories' => 'c,r,u,d',
+            'products' => 'c,r,u,d',
+        ],
         'admin' => [
-            'users' => 'c,r,u,d'
-        ]
-//        'super-admin' => [
-//            'users' => 'c,r,u,d',
-//            'payments' => 'c,r,u,d',
-//            'profile' => 'r,u'
-//        ],
-//        'admin' => [
-//            'users' => 'c,r,u,d',
-//            'profile' => 'r,u'
-//        ],
-//        'user' => [
-//            'profile' => 'r,u',
-//        ],
-//        'role_name' => [
-//            'module_1_name' => 'c,r,u,d',
-//        ]
+            'categories' => 'c,r,u,d',
+            'products' => 'c,r,u,d',
+        ],
+
     ],
 
     'permissions_map' => [

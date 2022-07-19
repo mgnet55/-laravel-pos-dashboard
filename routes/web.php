@@ -14,12 +14,9 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('dashboard.index');
-});
+Route::get('/', fn() => redirect()->route('dashboard.index'));
 
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Start Localization Prefix Routes
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
@@ -32,7 +29,11 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::get('index', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('index');
 
         Route::resource('users', \App\Http\Controllers\Dashboard\UserController::class);
+        Route::resource('categories', \App\Http\Controllers\Dashboard\CategoryController::class)->except('show');
+        Route::resource('products', \App\Http\Controllers\Dashboard\ProductController::class);
+
     });
     //End Dashboard Routes
 
 });//End localization Prefix Routes
+

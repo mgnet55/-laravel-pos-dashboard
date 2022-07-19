@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Blank Page</title>
+    <title>POS Dashboard | {{ ucfirst(Request()->segment(3)) }}</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     {{--<!-- Bootstrap 3.3.7 -->--}}
@@ -30,12 +30,6 @@
         <link rel="stylesheet" href="{{ asset('dashboard/css/AdminLTE.min.css') }}">
     @endif
 
-    <style>
-        .mr-2 {
-            margin-right: 5px;
-        }
-
-    </style>
     {{--<!-- jQuery 3 -->--}}
     <script src="{{ asset('dashboard/js/jquery.min.js') }}"></script>
 
@@ -47,11 +41,11 @@
     <link rel="stylesheet" href="{{ asset('dashboard/plugins/icheck/all.css') }}">
 
     {{--html in  ie--}}
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    {{--    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>--}}
+    {{--    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>--}}
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 
 <div class="wrapper">
 
@@ -90,15 +84,10 @@
                                     <li><!-- start message -->
                                         <a href="#">
                                             <div class="pull-left">
-                                                <img src="{{ asset('dashboard/img/user2-160x160.jpg') }}"
+                                                <img src="{{auth()->user()->image_path}}"
                                                      class="img-circle" alt="User Image">
                                             </div>
-                                            <h4>
-                                                Support Team
-                                                <small>
-                                                    <i class="fa fa-clock-o"></i> 5 mins
-                                                </small>
-                                            </h4>
+                                            <h4>Support Team<small><i class="fa fa-clock-o"></i> 5 mins</small></h4>
                                             <p>Why not buy a new awesome theme?</p>
                                         </a>
                                     </li>
@@ -113,8 +102,7 @@
                     {{--<!-- Notifications: style can be found in dropdown.less -->--}}
                     <li class="dropdown notifications-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
+                            <i class="fa fa-bell-o"></i><span class="label label-warning">10</span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">You have 10 notifications</li>
@@ -122,9 +110,7 @@
                                 {{--<!-- inner menu: contains the actual data -->--}}
                                 <ul class="menu">
                                     <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                        </a>
+                                        <a href="#"><i class="fa fa-users text-aqua"></i> 5 new members joined today</a>
                                     </li>
                                 </ul>
                             </li>
@@ -160,47 +146,67 @@
                     <li class="dropdown user user-menu">
 
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{ asset('dashboard/img/user2-160x160.jpg') }}" class="user-image"
+                            <img src="{{ auth()->user()->image_path }}" class="user-image"
                                  alt="User Image">
-                            <span class="hidden-xs">{{auth()->user()->name}}</span>
+                            <span class="hidden-xs">{{auth()->user()->first_name}}</span>
                         </a>
                         <ul class="dropdown-menu">
 
                             {{--<!-- User image -->--}}
                             <li class="user-header">
-                                <img src="{{ asset('dashboard/img/user2-160x160.jpg') }}" class="img-circle"
+                                <img src="{{ auth()->user()->image_path }}" class="img-circle"
                                      alt="User Image">
 
-                                <p>
-                                    Ahmed Hassan
-                                    <small>Member since 2 days</small>
-                                </p>
+                                <p>{{auth()->user()->name}}<small>{{auth()->user()->email}}</small></p>
                             </li>
-
                             {{--<!-- Menu Footer-->--}}
                             <li class="user-footer">
-
-
                                 <a href="{{ route('logout') }}" class="btn btn-default btn-flat" onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">@lang('site.logout')</a>
-
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                       style="display: none;">
                                     @csrf
                                 </form>
-
                             </li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
-
     </header>
 
     @include('layouts.dashboard._aside')
+    <!-- Start of content wrapper -->
+    <div class="content-wrapper">
+        {{--Page Links--}}
+        <section class="content-header">
+            @yield('breadcrumb')
+        </section>
 
-    @yield('content')
+        {{--Page Content--}}
+        <section class="content">
+            <div class="box box-primary">
+                {{--Content Header--}}
+                <div class="box-header with-border">
+                    <h3 class="box-title mb-3">
+                        @yield('content-header')
+                    </h3>
+                </div>
+                {{--End Content Header--}}
+
+                {{--Content--}}
+                <div class="box-body">
+                    @yield('content-body')
+                </div>
+                {{--End Content--}}
+                <div class="box-footer">
+                    @yield('content-footer')
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- end of content wrapper -->
 
     @include('partials._session')
 
@@ -209,8 +215,7 @@
             <b>Version</b> 2.4.0
         </div>
         <strong>Copyright &copy; 2014-2016
-            <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
-        reserved.
+            <a href="https://adminlte.io">AdminLTE</a>.</strong> All rights reserved.
     </footer>
 
 </div><!-- end of wrapper -->
@@ -240,32 +245,31 @@
 
         $('.delete').click(function (e) {
 
-            var that = $(this)
+            const that = $(this);
 
             e.preventDefault();
 
-            var n = new Noty({
+            const notification = new Noty({
                 text: "@lang('site.confirm_delete')",
                 type: "warning",
                 killer: true,
                 buttons: [
-                    Noty.button("@lang('site.yes')", 'btn btn-success mr-2', function () {
+                    Noty.button("@lang('site.yes')", 'btn btn-success mx-2', function () {
                         that.closest('form').submit();
                     }),
 
-                    Noty.button("@lang('site.no')", 'btn btn-primary mr-2', function () {
-                        n.close();
+                    Noty.button("@lang('site.no')", 'btn btn-primary mx-2', function () {
+                        notification.close();
                     })
                 ]
             });
 
-            n.show();
+            notification.show();
 
         });//end of delete
 
     })
-
-
 </script>
+@yield('js')
 </body>
 </html>

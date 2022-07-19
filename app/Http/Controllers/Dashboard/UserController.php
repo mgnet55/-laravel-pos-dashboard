@@ -5,18 +5,36 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Permission;
 use App\Models\user;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
+
+    protected array $models = ['admins', 'categories', 'products'];
+    protected array $permissions = ['create', 'read', 'update', 'delete'];
+
+    public function __construct()
+    {
+
+        $this->middleware('permission:admins-create')->only(['create', 'store']);
+        $this->middleware('permission:admins-read|admins-update|admins-delete')->only(['index']);
+        $this->middleware('permission:admins-update')->only(['update', 'edit']);
+        $this->middleware('permission:admins-update')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::whereRoleIs('admin')
+            ->when($SearchText = request('search'), fn($query) => $query->filterByName($SearchText))
+            ->latest()
+            ->paginate();
 
         return view('dashboard.users.index', compact('users'));
     }
@@ -27,28 +45,45 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('dashboard.users.create');
+        return view('dashboard.users.create', ['models' => $this->models, 'permissions' => $this->permissions]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreUserRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
      */
     public function store(StoreUserRequest $request)
     {
-        $user = new User($request->validated());
-        $user->save();
-        return redirect()->route('dashboard.users.index', status: 200);
+        //initialize User
+        $user = new User($request->safe()->except(['permissions', 'image']));
+        //Image saving and setting value for User
+        if ($request->has('image')) {
+            Image::make($request->image)->resize(150, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(storage_path('app/uploads/user-images/' . $ImageName = $request->file('image')->hashName()));
+            $user->image = $ImageName;
+        }
 
+        //$user->image =
+        $user->save();
+        //Attaching Role
+        $user->attachRole('admin');
+        // Preparing and syncing permissions array
+        $permissionsArray = \Arr::flatten($request->safe(['permissions']));
+        $permissions = Permission::whereIn('name', $permissionsArray)->get('id');
+        $user->syncPermissions($permissions);
+        session()->flash('success', __('messages.added_successfully'));
+        return redirect(status: 200)->route('dashboard.users.index');
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\user $user
+     * @param user $user
      * @return \Illuminate\Http\Response
      */
     public function show(user $user)
@@ -59,34 +94,61 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\user $user
-     * @return \Illuminate\Http\Response
+     * @param user $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(user $user)
     {
-        //
+        $user->append('permissions');
+        return view('dashboard.users.edit', [
+            'user' => $user,
+            'models' => $this->models,
+            'permissions' => $this->permissions
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param \App\Models\user $user
-     * @return \Illuminate\Http\Response
+     * @param UpdateUserRequest $request
+     * @param user $user
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
      */
     public function update(UpdateUserRequest $request, user $user)
     {
+        // prepare data
+        $updatedData = $request->safe()->except(['permissions', 'image']);
+        // if image has been uploaded replace the old one or save it with hashed name
+        if ($request->has('image')) {
+            // save image
+            Image::make($request->image)->resize(150, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })->save(storage_path('app/uploads/user-images/' . $updatedData['image'] = $request->file('image')->hashName()));
+        }
+        $user->update($updatedData);
+        $user->syncPermissions($request->validated('permissions'));
+        session()->flash('success', __('messages.updated_successfully'));
+
+        return redirect(status: 200)->route('dashboard.users.index');
         //
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\user $user
-     * @return \Illuminate\Http\Response
+     * @param user $user
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(user $user)
     {
         $user->delete();
+        $user->image ?? Storage::delete(storage_path('uploads/user-images/' . $user->image));
+
+        session()->flash('success', __('messages.deleted_successfully'));
+        return redirect()->route('dashboard.users.index');
     }
+
+
 }

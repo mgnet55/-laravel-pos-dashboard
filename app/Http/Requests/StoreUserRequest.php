@@ -29,6 +29,9 @@ class StoreUserRequest extends FormRequest
             'last_name' => 'required|alpha',
             'password' => ['required', Password::min(8)->letters()->numbers(), 'confirmed'],
             'email' => 'required|email|unique:users,email',
+            'permissions' => 'array',
+            'permissions.*' => 'string',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
 
         ];
     }

@@ -1,10 +1,10 @@
 <?php
 return [
     'add' => 'اضف',
-    'create' => 'اضافه',
+    'create' => 'اضافة',
     'read' => 'عرض',
     'edit' => 'تعديل',
-    'update' => 'تعديل',
+    'update' => 'تحديث',
     'delete' => 'حذف',
     'search' => 'بحث',
     'show' => 'عرض',

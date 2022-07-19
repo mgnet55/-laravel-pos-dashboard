@@ -22,8 +22,8 @@ return [
 
     'permissions' => 'الصلاحيات',
 
-    'categories' => 'الاقسام',
-    'all_categories' => 'كل الاقسام',
+    'categories' => 'الأقسام',
+    'all_categories' => 'كل الأقسام',
     'products_count' => 'عدد الامنتجات',
     'related_products' => 'المنتجات المرتبطه',
     'category' => 'القسم',
