@@ -17,13 +17,19 @@
                         class="fa fa-th"></i><span>@lang('site.dashboard')</span></a></li>
 
             <li><a href="{{ route('dashboard.users.index') }}"><i
-                        class="fa fa-users"></i><span>@lang('site.admins')</span></a></li>
+                        class="fa fa-user-secret"></i><span>@lang('site.admins')</span></a></li>
+
+            <li><a href="{{ route('dashboard.clients.index') }}"><i
+                        class="fa fa-users"></i><span>@lang('site.clients')</span></a></li>
 
             <li><a href="{{ route('dashboard.categories.index') }}"><i
                         class="fa fa-tags"></i><span>@lang('site.categories')</span></a></li>
 
             <li><a href="{{ route('dashboard.products.index') }}"><i
                         class="glyphicon glyphicon-barcode"></i><span>@lang('site.products')</span></a></li>
+
+            <li><a href="{{ route('dashboard.products.index') }}"><i
+                        class="fa fa-shopping-cart"></i><span>@lang('site.orders')</span></a></li>
 
 
             {{--<li class="treeview">--}}

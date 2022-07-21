@@ -86,7 +86,7 @@ class ProductController extends Controller
      *
      * @param \App\Http\Requests\UpdateProductRequest $request
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
@@ -104,7 +104,10 @@ class ProductController extends Controller
             ));
         }
         $product->update($updatedData);
-        session()->flash('success', __('messages.updated_successfully'));
+
+        if ($product->wasChanged()) {
+            session()->flash('success', __('messages.updated_successfully'));
+        }
 
         return redirect(status: 200)->route('dashboard.products.index');
     }
@@ -113,13 +116,15 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
      */
     public function destroy(Product $product)
     {
-        $product->delete();
+        $product->deleteOrFail();
         $product->image = null;
-        session()->flash('success', __('messages.updated_successfully'));
+        session()->flash('success', __('messages.deleted_successfully'));
+
         return redirect(status: 200)->route('dashboard.products.index');
     }
 }

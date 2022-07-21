@@ -1,7 +1,6 @@
 @php
-    $userPermissions = auth()->user()->permissions;
+    $userPermissions = $user->permissions;
 @endphp
-
 @extends('layouts.dashboard')
 
 @section('breadcrumb')

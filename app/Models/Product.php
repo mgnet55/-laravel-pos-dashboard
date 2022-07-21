@@ -69,7 +69,7 @@ class Product extends Model
         return $this->image ?
             asset('uploads/product-images/' . $this->image)
             :
-            "https://fakeimg.pl/250x250/?text=NO-IMAGE&font=lobster";
+            "https://fakeimg.pl/250x250/?text=NO-IMAGE";
     }
 
     /*

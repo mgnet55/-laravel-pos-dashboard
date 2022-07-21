@@ -11,6 +11,7 @@ return [
     'country' => 'Country',
     'address' => 'Address',
     'phone' => 'Phone',
+    'phone_alt' => 'Alt-Phone',
     'mobile' => 'Mobile',
     'age' => 'age',
     'sex' => 'sex',

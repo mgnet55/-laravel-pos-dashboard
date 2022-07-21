@@ -62,12 +62,16 @@ class CategoryController extends Controller
      *
      * @param \App\Http\Requests\UpdateCategoryRequest $request
      * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
         $category->update($request->validated());
-        session()->flash('success', __('messages.updated_successfully'));
+
+        if ($category->wasChanged()) {
+            session()->flash('success', __('messages.updated_successfully'));
+        }
+
         return redirect(status: 200)->route('dashboard.categories.index');
     }
 

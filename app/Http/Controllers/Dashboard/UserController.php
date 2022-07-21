@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\Permission;
 use App\Models\user;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
@@ -13,7 +12,7 @@ use Intervention\Image\Facades\Image;
 class UserController extends Controller
 {
 
-    protected array $models = ['admins', 'categories', 'products'];
+    protected array $models = ['admins', 'categories', 'products', 'clients', 'orders'];
     protected array $permissions = ['create', 'read', 'update', 'delete'];
 
     public function __construct()
@@ -71,10 +70,8 @@ class UserController extends Controller
         $user->save();
         //Attaching Role
         $user->attachRole('admin');
-        // Preparing and syncing permissions array
-        $permissionsArray = \Arr::flatten($request->safe(['permissions']));
-        $permissions = Permission::whereIn('name', $permissionsArray)->get('id');
-        $user->syncPermissions($permissions);
+        //Syncing permissions array
+        $user->syncPermissions($request->validated('permissions'));
         session()->flash('success', __('messages.added_successfully'));
         return redirect(status: 200)->route('dashboard.users.index');
 

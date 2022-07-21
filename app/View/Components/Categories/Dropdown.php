@@ -4,6 +4,7 @@ namespace App\View\Components\Categories;
 
 use App\Models\Category;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -20,7 +21,10 @@ class Dropdown extends Component
      */
     public function __construct(public $selected = 0, public string $name = 'category_id')
     {
-        $this->categories = Category::all();
+        $this->categories = Cache::rememberForever('users', function () {
+            return Category::all();
+        });
+        //$this->categories = Category::all();
         $this->currentLocale = LaravelLocalization::getCurrentLocale();
 
     }

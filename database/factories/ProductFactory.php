@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -16,16 +17,17 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+
+        $name = $description = [];
+        foreach (LaravelLocalization::getSupportedLanguagesKeys() as $locale) {
+            $name[$locale] = fake()->words(3, true);
+            $description[$locale] = fake()->sentence(10);
+        }
+
         return [
 
-            'name' => [
-                'ar' => fake('ar_SA')->sentence(3),
-                'en' => fake()->sentence(3),
-            ],
-            'description' => [
-                'ar' => fake('ar_SA')->sentence(10),
-                'en' => fake()->sentence(10),
-            ],
+            'name' => $name,
+            'description' => $description,
             'purchase_price' => fake()->randomFloat(2, 5, 100),
             'sell_price' => fake()->randomFloat(2, 101, 250),
             'stock' => fake()->numberBetween(5, 150),

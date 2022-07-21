@@ -31,20 +31,20 @@ class UpdateProductRequest extends FormRequest
 
         $rules = [];
         foreach ($locales as $locale) {
-            $rules['name.' . $locale] = ['bail', Rule::unique('products', 'name->' . $locale)->ignore($this->product), new AlphanumericSpaceRule()];
-            $rules['description.' . $locale] = ['bail', Rule::unique('products', 'description->' . $locale)->ignore($this->product), new AlphanumericSpaceRule()];
-
+            $rules['name.' . $locale] = ['bail', new AlphanumericSpaceRule(), Rule::unique('products', 'name->' . $locale)->ignore($this->product)];
         }
+        
         return [
-            'name' => ['array:' . $localesString, 'required_array_keys:' . $localesString],
-            'description' => ['array:' . $localesString, 'required_array_keys:' . $localesString],
-            'sell_price' => 'numeric',
-            'purchase_price' => 'numeric',
-            'stock' => 'numeric|integer',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-            'category_id' => 'exists:categories,id',
-            /*Merging Localized Rules*/
-            ...$rules
-        ];
+                'name' => ['array:' . $localesString, 'required_array_keys:' . $localesString],
+                'description' => ['array:' . $localesString, 'required_array_keys:' . $localesString],
+                'description.*' => 'string',
+                'sell_price' => 'numeric',
+                'purchase_price' => 'numeric',
+                'stock' => 'numeric|integer',
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:1024',
+                'category_id' => 'exists:categories,id',
+
+                /*Merging Localized Rules*/
+            ] + $rules;
     }
 }

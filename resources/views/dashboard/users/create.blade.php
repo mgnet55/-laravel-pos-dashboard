@@ -87,7 +87,7 @@
 
                             <div class="tab-pane {{$loop->first?'active':''}}" id="{{$model}}">
                                 @foreach($permissions as $permission)
-                                    <label class="mx-5">
+                                    <label>
                                         @lang('operations.'.$permission)
                                         <input name="permissions[]" value="{{$model.'-'.$permission}}"
                                                type="checkbox">

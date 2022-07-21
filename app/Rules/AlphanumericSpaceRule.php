@@ -16,7 +16,7 @@ class AlphanumericSpaceRule implements InvokableRule
      */
     public function __invoke($attribute, $value, $fail)
     {
-        if (!preg_match('/^[^-\s\pN][\pL\pM\pN\s_-]+$/u', $value)) {
+        if (!preg_match('/^[^-\s\pN][\pL\pM\pN\s_-]+$/u', $value) > 0) {
             $fail('The :attribute must be letters,numbers and space.');
         }
     }

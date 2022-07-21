@@ -29,7 +29,7 @@
                 <div class="form-group">
                     <label for="name">@lang('fields.'.$locale.'.name')</label>
                     <input name="name[{{$locale}}]" type="text" class="form-control" id="name" required
-                           value="{{ old('name['.$locale.']',$category->name[$locale]) }}"
+                           value="{{ old('name'.$locale,$category->name[$locale]) }}"
                            placeholder="@lang('fields.'.$locale.'.name')">
                 </div>
             @endforeach

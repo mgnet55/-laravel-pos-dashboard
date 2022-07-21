@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
                     'category_id' => $category->id
                 ]);
             });
+        \App\Models\Client::factory(10)->create();
 
         $this->command->comment('###### Login credentials ######');
         $this->command->table(['Email', 'Password'], [['email' => 'super-admin@app.com', 'password' => 'password']]);

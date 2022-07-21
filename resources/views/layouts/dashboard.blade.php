@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="{{LaravelLocalization::getCurrentLocaleDirection()}}">
+<html dir="{{LaravelLocalization::getCurrentLocaleDirection()}}" lang="{{LaravelLocalization::getCurrentLocale()}}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,22 +37,14 @@
     <link rel="stylesheet" href="{{ asset('dashboard/plugins/noty/noty.css') }}">
     <script src="{{ asset('dashboard/plugins/noty/noty.min.js') }}"></script>
 
-    {{--<!-- iCheck -->--}}
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/icheck/all.css') }}">
-
-    {{--html in  ie--}}
-    {{--    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>--}}
-    {{--    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>--}}
-
 </head>
-<body class="hold-transition skin-blue sidebar-mini fixed">
-
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse fixed">
 <div class="wrapper">
 
     <header class="main-header">
 
         {{--<!-- Logo -->--}}
-        <a href="{{ asset('dashboard') }}/index2.html" class="logo">
+        <a href="{{ route('dashboard.index')}}" class="logo">
             {{--<!-- mini logo for sidebar mini 50x50 pixels -->--}}
             <span class="logo-mini"><b>A</b>LT</span>
             <span class="logo-lg"><b>Admin</b>LTE</span>
@@ -60,12 +52,7 @@
 
         <nav class="navbar navbar-static-top">
             <!-- Sidebar toggle button-->
-            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
@@ -222,26 +209,14 @@
 
 {{--<!-- Bootstrap 3.3.7 -->--}}
 <script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
-
-{{--icheck--}}
-<script src="{{ asset('dashboard/plugins/icheck/icheck.min.js') }}"></script>
-
-{{--<!-- FastClick -->--}}
-<script src="{{ asset('dashboard/js/fastclick.js') }}"></script>
-
 {{--<!-- AdminLTE App -->--}}
 <script src="{{ asset('dashboard/js/adminlte.min.js') }}"></script>
 
 
 <script>
     $(document).ready(function () {
-        $('.sidebar-menu').tree();
+        // $('.sidebar-menu').tree();
 
-        //icheck
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        });
 
         $('.delete').click(function (e) {
 
@@ -251,20 +226,20 @@
 
             const notification = new Noty({
                 text: "@lang('site.confirm_delete')",
+                layout: 'topCenter',
                 type: "warning",
                 killer: true,
                 buttons: [
-                    Noty.button("@lang('site.yes')", 'btn btn-success mx-2', function () {
+                    Noty.button("@lang('site.yes')", 'btn btn-danger', function () {
                         that.closest('form').submit();
                     }),
-
-                    Noty.button("@lang('site.no')", 'btn btn-primary mx-2', function () {
+                    Noty.button("@lang('site.no')", 'btn btn-primary', function () {
                         notification.close();
                     })
                 ]
-            });
+            }).show();
 
-            notification.show();
+            // notification.show();
 
         });//end of delete
 

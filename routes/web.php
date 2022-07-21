@@ -31,6 +31,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::resource('users', \App\Http\Controllers\Dashboard\UserController::class);
         Route::resource('categories', \App\Http\Controllers\Dashboard\CategoryController::class)->except('show');
         Route::resource('products', \App\Http\Controllers\Dashboard\ProductController::class);
+        Route::resource('clients', \App\Http\Controllers\Dashboard\ClientController::class);
+        Route::scopeBindings()->group(function () {
+            Route::resource('clients.orders', \App\Http\Controllers\Dashboard\ClientOrderController::class);
+        });
 
     });
     //End Dashboard Routes

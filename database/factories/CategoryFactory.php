@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\odel=Category>
@@ -16,11 +17,12 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
+        $name = [];
+        foreach (LaravelLocalization::getSupportedLanguagesKeys() as $locale) {
+            $name[$locale] = fake()->words(4, true);
+        }
         return [
-            'name' => [
-                'ar' => fake('ar_SA')->words(4, true),
-                'en' => fake()->words(4, true)
-            ],
+            'name' => $name
         ];
     }
 }

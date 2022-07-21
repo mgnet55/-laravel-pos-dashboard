@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\UserObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'password',
         'image'
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -83,7 +85,7 @@ class User extends Authenticatable
         return $this->image ?
             asset('uploads/user-images/' . $this->image)
             :
-            "https://ui-avatars.com/api/?name={$this->first_name}+{$this->last_name}";
+            "https://fakeimg.pl/250x250/?text=NO-IMAGE";
     }
 
     public function setImageAttribute($value)
