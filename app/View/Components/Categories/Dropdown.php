@@ -22,7 +22,7 @@ class Dropdown extends Component
     public function __construct(public $selected = 0, public string $name = 'category_id')
     {
         $this->categories = Cache::rememberForever('users', function () {
-            return Category::all();
+            return Category::all(['id', 'name']);
         });
         //$this->categories = Category::all();
         $this->currentLocale = LaravelLocalization::getCurrentLocale();

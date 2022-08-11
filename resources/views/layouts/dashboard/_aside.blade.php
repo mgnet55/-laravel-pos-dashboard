@@ -28,7 +28,7 @@
             <li><a href="{{ route('dashboard.products.index') }}"><i
                         class="glyphicon glyphicon-barcode"></i><span>@lang('site.products')</span></a></li>
 
-            <li><a href="{{ route('dashboard.products.index') }}"><i
+            <li><a href="{{ route('dashboard.orders.index') }}"><i
                         class="fa fa-shopping-cart"></i><span>@lang('site.orders')</span></a></li>
 
 

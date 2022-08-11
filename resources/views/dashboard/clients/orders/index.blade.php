@@ -46,32 +46,31 @@
         </form>
     </div>
 
-    @if($clients->count())
+    @if($orders->count())
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
                 <th>#</th>
-                <th>@lang('fields.name')</th>
-                <th>@lang('fields.email')</th>
-                <th>@lang('fields.phone')</th>
-                <th>@lang('fields.phone_alt')</th>
-                <th>@lang('fields.address')</th>
+                <th>@lang('fields.date')</th>
+                <th>@lang('fields.total')</th>
+                <th>@lang('fields.quantity')</th>
+                <th>@lang('fields.status')</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            @foreach($clients as $client)
+            @foreach($orders as $order)
                 <tr>
                     <td>{{ $loop->index+1 }}</td>
-                    <td>{{ $client->name }}</td>
-                    <td>{{ $client->email }}</td>
-                    <td>{{ $client->phone[0] }}</td>
-                    <td>{{ $client->phone[1]??'' }}</td>
-                    <td>{{ $client->address }}</td>
+                    <td>{{ $order->created_at }}</td>
+                    <td>{{ $order->total_price }}</td>
+                    <td>{{ $order->total_products }}</td>
+                    <td>{{ $order->status }}</td>
                     <td>
                         @if(in_array('admins-update',$userPermissions))
                             <a class="btn btn-info btn-sm"
-                               href="{{route('dashboard.clients.edit',$client)}}">@lang('operations.edit') <i
+                               href="{{route('dashboard.clients.orders.edit',[$client,$order])}}">@lang('operations.edit')
+                                <i
                                     class="fa fa-edit"></i></a>
                         @else
 
@@ -81,7 +80,7 @@
                         @endif
 
                         @if(in_array('admins-delete',$userPermissions))
-                            <form action="{{ route('dashboard.clients.destroy',$client) }}"
+                            <form action="{{ route('dashboard.clients.orders.destroy',[$client,$order]) }}"
                                   method="post"
                                   style="display: inline-block">
                                 @csrf
@@ -108,6 +107,3 @@
     @endif
 @endsection
 
-@section('content-footer')
-    {{ $clients->withQueryString()->links() }}
-@endsection

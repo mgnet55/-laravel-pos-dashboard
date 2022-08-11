@@ -37,6 +37,11 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function orders(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Order::class)->withTimestamps();
+    }
+
     /*
      *  Scopes
      *

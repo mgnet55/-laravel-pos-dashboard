@@ -26,7 +26,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Start Dashboard Routes
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => 'auth'], function () {
 
-        Route::get('index', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('index');
+        Route::get('', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('index');
 
         Route::resource('users', \App\Http\Controllers\Dashboard\UserController::class);
         Route::resource('categories', \App\Http\Controllers\Dashboard\CategoryController::class)->except('show');
@@ -35,6 +35,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::scopeBindings()->group(function () {
             Route::resource('clients.orders', \App\Http\Controllers\Dashboard\ClientOrderController::class);
         });
+        Route::resource('orders', \App\Http\Controllers\Dashboard\OrderController::class);
+
 
     });
     //End Dashboard Routes

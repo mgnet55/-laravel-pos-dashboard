@@ -35,7 +35,7 @@ return [
     'category_id' => 'القسم',
     'category' => 'القسم',
     'quantity' => 'الكميه',
-    'total' => 'المجموع',
+    'total' => 'الإجمالي',
     'purchase_price' => 'سعر الشراء',
     'price' => 'السعر',
     'sell_price' => 'سعر البيع',

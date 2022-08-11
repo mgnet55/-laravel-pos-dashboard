@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreOrderRequest;
-use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Requests\StoreClientOrderRequest;
+use App\Http\Requests\UpdateClientOrderRequest;
+use App\Models\Category;
 use App\Models\Client;
 use App\Models\Order;
+use App\Models\Product;
 
 class ClientOrderController extends Controller
 {
@@ -17,11 +19,10 @@ class ClientOrderController extends Controller
      */
     public function index(Client $client)
     {
-        //dd($client->orders);
-        dd($orders = $client->orders()->get());
-        return view('dashboard.clients.orders.index');
-//        return $client;
-        //return 'hhh';
+        $orders = $client->orders()->latest()->with('products',)->get();
+        $orders->append(['total_price', 'total_products']);
+
+        return view('dashboard.clients.orders.index', compact('orders', 'client'));
     }
 
     /**
@@ -31,32 +32,56 @@ class ClientOrderController extends Controller
      */
     public function create(Client $client)
     {
-        return view('dashboard.clients.orders.create', compact('client'));
+        $categories = Category::with('products')->get();
+
+        return view('dashboard.clients.orders.create', compact('client', 'categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\StoreOrderRequest $request
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\StoreClientOrderRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Client $client, StoreOrderRequest $request)
+    public function store(Client $client, StoreClientOrderRequest $request)
     {
-        //
+        $order_products = $request->validated('products');
+        $products = Product::find(array_keys($order_products));
+
+        \DB::beginTransaction();
+
+        try {
+            $order_products = array_map(function ($id, $quantity) use ($products) {
+                $product = $products->find($id);
+                $product->decrement('stock', $quantity);
+                return ['product_id' => $id, 'quantity' => $quantity, 'unit_price' => $product->sell_price];
+            }, array_keys($order_products), $order_products);
+
+            $order = $client->orders()->create();
+            $order->products()->sync($order_products);
+            \DB::commit();
+
+            \Session::flash('success', 'orders created successfully');
+            return redirect(status: 200)->route('dashboard.clients.orders.index', $client);
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+        }
+
     }
 
     /**
      * Display the specified resource.
      *
      * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
+     * @return Order
      */
-    public function show(Order $order)
+    public function show(Client $client, Order $order)
     {
-        //
+        return $order->load('products');
     }
 
-    /**
+    /*      *
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Order $order
@@ -70,11 +95,11 @@ class ClientOrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdateOrderRequest $request
+     * @param \App\Http\Requests\UpdateClientOrderRequest $request
      * @param \App\Models\Order $order
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(UpdateClientOrderRequest $request, Order $order)
     {
         //
     }
@@ -83,10 +108,25 @@ class ClientOrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Order $order)
+    public function destroy(Client $client, Order $order)
     {
-        //
+        $order->load('products');
+        \DB::beginTransaction();
+        try {
+            $order->products->each(function ($product) {
+                $product->increment('stock', $product->pivot->quantity);
+            });
+            $order->delete();
+            \DB::commit();
+            \Session::flash('success', 'Order Deleted Successfully');
+
+            return redirect(status: 200)->route('dashboard.clients.orders.index', $client);
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+        }
+
     }
 }

@@ -13,6 +13,7 @@ return [
 
     'clients' => 'Clients',
     'client_name' => 'Client name',
+    'client' => 'Client',
     'previous_orders' => 'Previous orders',
     'orders' => 'Orders',
 
@@ -30,6 +31,8 @@ return [
 
     'products' => 'Products',
     'product' => 'Product',
+    'order' => 'Order',
+    'order_details' => 'Order Details'
 
 
 ];

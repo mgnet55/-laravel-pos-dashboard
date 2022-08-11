@@ -13,6 +13,7 @@ return [
 
     'clients' => 'العملاء',
     'client_name' => 'اسم العميل',
+    'client' => 'العميل',
     'previous_orders' => 'الطلبات السابقه',
     'orders' => 'الطلبات',
 
@@ -32,6 +33,8 @@ return [
 
     'products' => 'المنتجات',
     'product' => 'المنتج',
+    'order' => 'الطلب',
+    'order_details' => 'تفاصيل الطلب'
 
 
 ];

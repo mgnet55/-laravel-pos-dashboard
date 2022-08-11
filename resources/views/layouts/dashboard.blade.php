@@ -7,16 +7,16 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
     {{--<!-- Bootstrap 3.3.7 -->--}}
-    <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/ionicons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/skin-blue.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/ionicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/skin-blue.min.css') }}">
 
     @if (app()->getLocale() == 'ar')
-        <link rel="stylesheet" href="{{ asset('dashboard/css/font-awesome-rtl.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/AdminLTE-rtl.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/font-awesome-rtl.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/AdminLTE-rtl.min.css') }}">
         <link href="https://fonts.googleapis.com/css?family=Cairo:400,700" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/bootstrap-rtl.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/rtl.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-rtl.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/rtl.css') }}">
 
         <style>
             body, h1, h2, h3, h4, h5, h6 {
@@ -26,16 +26,16 @@
     @else
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/font-awesome.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/AdminLTE.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/AdminLTE.min.css') }}">
     @endif
 
     {{--<!-- jQuery 3 -->--}}
-    <script src="{{ asset('dashboard/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
 
     {{--noty--}}
-    <link rel="stylesheet" href="{{ asset('dashboard/plugins/noty/noty.css') }}">
-    <script src="{{ asset('dashboard/plugins/noty/noty.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/plugins/noty/noty.css') }}">
+    <script src="{{ asset('assets/plugins/noty/noty.min.js') }}"></script>
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini sidebar-collapse fixed">
@@ -208,9 +208,9 @@
 </div><!-- end of wrapper -->
 
 {{--<!-- Bootstrap 3.3.7 -->--}}
-<script src="{{ asset('dashboard/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 {{--<!-- AdminLTE App -->--}}
-<script src="{{ asset('dashboard/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('assets/js/adminlte.min.js') }}"></script>
 
 
 <script>

@@ -14,14 +14,15 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->json('description');
             $table->json('name');
             $table->foreignId('category_id')->constrained();
             $table->string('image')->nullable();
-            $table->double('purchase_price', 8, 2)->default(0);
-            $table->double('sell_price', 8, 2)->default(0);
+            $table->unsignedDouble('purchase_price', 8, 2)->default(0);
+            $table->unsignedDouble('sell_price', 8, 2)->default(0);
             $table->integer('stock')->unsigned()->default(0);
+            $table->timestamps();
+            $table->softDeletes();
 
         });
     }
