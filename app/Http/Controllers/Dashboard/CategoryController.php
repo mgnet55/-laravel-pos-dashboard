@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -49,7 +50,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Category $category
+     * @param Category $category
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
@@ -60,8 +61,8 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdateCategoryRequest $request
-     * @param \App\Models\Category $category
+     * @param UpdateCategoryRequest $request
+     * @param Category $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateCategoryRequest $request, Category $category)
@@ -78,11 +79,22 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Category $category
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Category $category)
     {
-        //
+        if ($category->getKey() == 1) {
+            return redirect(status: 400)->route('dashboard.categories.index');
+        }
+
+        \DB::beginTransaction();
+        Product::where('category_id', $category->id)->update(['category_id' => 1]);
+        $category->delete();
+        \DB::commit();
+
+        session()->flash('success', __('messages.deleted_successfully'));
+        return redirect(status: 200)->route('dashboard.categories.index');
+
     }
 }

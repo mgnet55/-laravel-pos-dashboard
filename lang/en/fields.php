@@ -37,6 +37,7 @@ return [
     'total' => 'Total',
     'purchase_price' => 'Purchase price',
     'price' => 'Price',
+    'unit_price' => 'Unit Price',
     'sell_price' => 'Sell price',
     'stock' => 'Stock',
     'profit_percent' => 'Profit %',

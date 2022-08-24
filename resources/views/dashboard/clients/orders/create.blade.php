@@ -18,45 +18,7 @@
 @endsection
 
 @section('content-body')
-    {{--  <div class="row">
-          <div class="col-md-3">
-              <div class="info-box">
-                  <div class="info-box-content">
-                      <span class="info-box-text">@lang('fields.name')</span>
-                      <span class="info-box-number">{{$client->name}}</span>
-                  </div>
-                  <!-- /.info-box-content -->
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="info-box">
-                  <div class="info-box-content">
-                      <span class="info-box-text">@lang('fields.address')</span>
-                      <span class="info-box-number">{{$client->address}}</span>
-                  </div>
-                  <!-- /.info-box-content -->
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="info-box">
-                  <div class="info-box-content">
-                      <span class="info-box-text">@lang('fields.phone')</span>
-                      <span class="info-box-number">{{$client->phone[0]}}</span>
-                  </div>
-                  <!-- /.info-box-content -->
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="info-box">
-                  <div class="info-box-content">
-                      <span class="info-box-text">@lang('fields.phone_alt')</span>
-                      <span class="info-box-number">{{$client->phone[1]}}</span>
-                  </div>
-                  <!-- /.info-box-content -->
-              </div>
-          </div>
 
-      </div>--}}
     <!-- /.box-header -->
     @include('partials._errors')
 
@@ -104,13 +66,13 @@
 
                                                     @foreach ($category->products as $product)
                                                         <tr>
-                                                            <td>{{ $product->name[app()->getLocale()] }}</td>
+                                                            <td>{{ $product->localized_name }}</td>
                                                             <td>{{ $product->stock }}</td>
                                                             <td>{{ $product->sell_price }}</td>
                                                             <td>
                                                                 <a href="#"
                                                                    id="product-{{ $product->id }}"
-                                                                   data-name="{{ $product->name[app()->getLocale()] }}"
+                                                                   data-name="{{ $product->localized_name }}"
                                                                    data-id="{{ $product->id }}"
                                                                    data-price="{{ $product->sell_price }}"
                                                                    data-stock="{{ $product->stock }}"

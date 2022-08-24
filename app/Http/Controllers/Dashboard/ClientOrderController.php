@@ -74,11 +74,15 @@ class ClientOrderController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Order $order
-     * @return Order
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function show(Client $client, Order $order)
     {
-        return $order->load('products');
+        $order->load(['client', 'products' => function ($q) {
+            $q->select(['products.id', 'products.name']);
+        }])->append('total_price');
+
+        return view('dashboard.orders.show', compact('order'));
     }
 
     /*      *
@@ -126,6 +130,8 @@ class ClientOrderController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollBack();
+            return redirect(status: 400)->route('dashboard.clients.orders.index', $client);
+
         }
 
     }

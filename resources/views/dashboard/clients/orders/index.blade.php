@@ -14,10 +14,11 @@
 @endsection
 
 @section('content-header')
-    @lang('site.clients')
+    @lang('site.orders')
 @endsection
 
 @section('content-body')
+
     <div class="row" style="margin-bottom: 15px">
         <form action="{{route('dashboard.clients.index')}}" method="GET">
 
@@ -32,20 +33,58 @@
                     <i class="fa fa-search"></i>
                 </button>
 
-                @if(in_array('admins-create',$userPermissions))
-                    <a class="btn btn-success"
-                       href="{{route('dashboard.clients.create')}}">@lang('operations.create') <i
-                            class="fa fa-plus"></i>
-                    </a>
-                @else
+                {{--                @if(in_array('orders-create',$userPermissions))--}}
+                <a class="btn btn-success"
+                   href="{{route('dashboard.clients.orders.create',$client)}}">@lang('operations.add_order') <i
+                        class="fa fa-plus"></i>
+                </a>
+                {{--@else
                     <button class="btn btn-success" disabled>@lang('operations.create')
                         <i class="fa fa-plus"></i>
                     </button>
-                @endif
+                @endif--}}
             </div>
         </form>
     </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="info-box">
+                <div class="info-box-content">
+                    <span class="info-box-text">@lang('fields.name')</span>
+                    <span class="info-box-number">{{$client->name}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="info-box">
+                <div class="info-box-content">
+                    <span class="info-box-text">@lang('fields.address')</span>
+                    <span class="info-box-number">{{$client->address}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="info-box">
+                <div class="info-box-content">
+                    <span class="info-box-text">@lang('fields.phone')</span>
+                    <span class="info-box-number">{{$client->phone[0]}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="info-box">
+                <div class="info-box-content">
+                    <span class="info-box-text">@lang('fields.phone_alt')</span>
+                    <span class="info-box-number">{{$client->phone[1]}}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
 
+    </div>
     @if($orders->count())
         <table class="table table-bordered table-hover">
             <thead>
@@ -67,6 +106,10 @@
                     <td>{{ $order->total_products }}</td>
                     <td>{{ $order->status }}</td>
                     <td>
+                        <a class="btn btn-default btn-sm"
+                           href="{{route('dashboard.clients.orders.show',[$client,$order])}}">@lang('site.order_details')
+                            <i
+                                class="fa fa-tags"></i></a>
                         @if(in_array('admins-update',$userPermissions))
                             <a class="btn btn-info btn-sm"
                                href="{{route('dashboard.clients.orders.edit',[$client,$order])}}">@lang('operations.edit')

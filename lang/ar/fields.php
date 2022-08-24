@@ -38,6 +38,7 @@ return [
     'total' => 'الإجمالي',
     'purchase_price' => 'سعر الشراء',
     'price' => 'السعر',
+    'unit_price' => 'سعر الوحدة',
     'sell_price' => 'سعر البيع',
     'stock' => 'المخزن',
     'profit_percent' => 'المكسب',

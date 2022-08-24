@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -44,12 +47,16 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Order $order
+     * @return Application|Factory|View
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        $order->load(['client', 'products' => function ($q) {
+            $q->select(['products.id', 'products.name']);
+        }])->append('total_price');
+
+        return view('dashboard.orders.show', compact('order'));
     }
 
     /**
@@ -58,7 +65,7 @@ class OrderController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Order $order)
     {
         //
     }
@@ -79,10 +86,28 @@ class OrderController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Order $order)
     {
-        //
+
+        $order->load('products');
+        \DB::beginTransaction();
+        try {
+            $order->products->each(function ($product) {
+                $product->increment('stock', $product->pivot->quantity);
+            });
+            $order->delete();
+            \DB::commit();
+            \Session::flash('success', 'Order Deleted Successfully');
+
+            return redirect(status: 200)->route('dashboard.orders.index');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            return redirect(status: 400)->route('dashboard.orders.index');
+
+        }
+
     }
 }

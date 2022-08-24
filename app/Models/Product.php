@@ -77,6 +77,11 @@ class Product extends Model
             "https://fakeimg.pl/250x250/?text=NO-IMAGE";
     }
 
+    public function getLocalizedNameAttribute(): string
+    {
+        return $this->name[app()->getLocale()];
+    }
+
     /*
      * Mutators
      *
