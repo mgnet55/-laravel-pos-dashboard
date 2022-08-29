@@ -71,17 +71,5 @@
 @endsection
 
 @section('js')
-    <script>
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $('#imagePreview').attr('src', e.target.result).height(150).show('fast', 'swing');
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
+    <script src="{{asset('assets/js/custom.js')}}"></script>
 @endsection

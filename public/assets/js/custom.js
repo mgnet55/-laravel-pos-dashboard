@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     $('.add-product-btn').on('click', function (e) {
         e.preventDefault();
-        $(this).removeClass('btn-success').addClass('btn-default disabled')
+        $(this).addClass('disabled')
         let [name, price, id, stock] = [$(this).data('name'), $(this).data('price'), $(this).data('id'), $(this).data('stock')]
         let orderItem = `<tr>
                 <td>${name}</td>
@@ -18,7 +18,7 @@ $(document).ready(function () {
     $('body').on('click', '.remove-product-btn', function (e) {
         e.preventDefault()
         let id = $(this).data('id')
-        $('#' + id).removeClass('disabled btn-default').addClass('btn-success')
+        $('#' + id).removeClass('disabled')
         $(this).closest('tr').remove()
         calculateTotal();
     })

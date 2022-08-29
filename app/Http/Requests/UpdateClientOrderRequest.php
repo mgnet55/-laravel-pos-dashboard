@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ProductExistWithQuantityUpdate;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateClientOrderRequest extends FormRequest
@@ -13,7 +14,7 @@ class UpdateClientOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,19 @@ class UpdateClientOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'products.*' => 'integer|min:1',
+            'products' => [
+                'bail',
+                'required',
+                'array',
+                new ProductExistWithQuantityUpdate()
+            ],
+
         ];
+    }
+
+    public function attributes()
+    {
+        return ['products.*' => 'product'];
     }
 }

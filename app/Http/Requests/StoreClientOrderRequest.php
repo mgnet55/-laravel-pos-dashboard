@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
+use App\Rules\ProductExistWithQuantity;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreClientOrderRequest extends FormRequest
@@ -30,18 +30,7 @@ class StoreClientOrderRequest extends FormRequest
                 'bail',
                 'required',
                 'array',
-                function ($attribute, $value, $fail) {
-                    $products = Product::select(['id', 'stock'])->find(array_keys($value));
-                    if ($products->count() == count(array_keys($value))) {
-                        $products->each(function ($product) use ($value, $fail) {
-                            if ($product->stock < $value[$product->id]) {
-                                $fail('Unavailable :attribute stock');
-                            }
-                        });
-                    } else {
-                        $fail('Invalid :attribute');
-                    }
-                }
+                new ProductExistWithQuantity()
             ],
 
         ];

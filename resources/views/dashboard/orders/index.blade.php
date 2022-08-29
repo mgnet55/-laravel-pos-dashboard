@@ -59,7 +59,7 @@
                     <td>{{ $order->total_products }}</td>
                     <td>{{ $order->status }}</td>
                     <td><a class="btn btn-default btn-sm"
-                           href="{{route('dashboard.orders.show',$order)}}">@lang('site.products') <i
+                           href="{{route('dashboard.orders.show',$order)}}">@lang('site.order_details') <i
                                 class="fa fa-tags"></i></a></td>
                     <td>
                         @if(in_array('orders-update',$userPermissions))

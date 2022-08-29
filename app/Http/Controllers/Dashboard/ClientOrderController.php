@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreClientOrderRequest;
-use App\Http\Requests\UpdateClientOrderRequest;
 use App\Models\Category;
 use App\Models\Client;
-use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ClientOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
     public function index(Client $client)
     {
@@ -28,7 +28,7 @@ class ClientOrderController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return View
      */
     public function create(Client $client)
     {
@@ -40,8 +40,9 @@ class ClientOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\StoreClientOrderRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Client $client
+     * @param StoreClientOrderRequest $request
+     * @return RedirectResponse
      */
     public function store(Client $client, StoreClientOrderRequest $request)
     {
@@ -66,73 +67,9 @@ class ClientOrderController extends Controller
 
         } catch (\Exception $e) {
             \DB::rollBack();
-        }
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Order $order
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
-     */
-    public function show(Client $client, Order $order)
-    {
-        $order->load(['client', 'products' => function ($q) {
-            $q->select(['products.id', 'products.name']);
-        }])->append('total_price');
-
-        return view('dashboard.orders.show', compact('order'));
-    }
-
-    /*      *
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Order $order)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \App\Http\Requests\UpdateClientOrderRequest $request
-     * @param \App\Models\Order $order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateClientOrderRequest $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Order $order
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Client $client, Order $order)
-    {
-        $order->load('products');
-        \DB::beginTransaction();
-        try {
-            $order->products->each(function ($product) {
-                $product->increment('stock', $product->pivot->quantity);
-            });
-            $order->delete();
-            \DB::commit();
-            \Session::flash('success', 'Order Deleted Successfully');
-
-            return redirect(status: 200)->route('dashboard.clients.orders.index', $client);
-
-        } catch (\Exception $e) {
-            \DB::rollBack();
             return redirect(status: 400)->route('dashboard.clients.orders.index', $client);
-
         }
 
     }
+
 }

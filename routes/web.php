@@ -33,9 +33,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         Route::resource('products', \App\Http\Controllers\Dashboard\ProductController::class);
         Route::resource('clients', \App\Http\Controllers\Dashboard\ClientController::class);
         Route::scopeBindings()->group(function () {
-            Route::resource('clients.orders', \App\Http\Controllers\Dashboard\ClientOrderController::class);
+            Route::resource('clients.orders', \App\Http\Controllers\Dashboard\ClientOrderController::class)->only(['create', 'store', 'index']);
         });
-        Route::resource('orders', \App\Http\Controllers\Dashboard\OrderController::class);
+        Route::resource('orders', \App\Http\Controllers\Dashboard\OrderController::class)->except(['create', 'store']);
 
 
     });

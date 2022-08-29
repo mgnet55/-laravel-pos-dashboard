@@ -107,12 +107,12 @@
                     <td>{{ $order->status }}</td>
                     <td>
                         <a class="btn btn-default btn-sm"
-                           href="{{route('dashboard.clients.orders.show',[$client,$order])}}">@lang('site.order_details')
+                           href="{{route('dashboard.orders.show',$order)}}">@lang('site.order_details')
                             <i
                                 class="fa fa-tags"></i></a>
                         @if(in_array('admins-update',$userPermissions))
                             <a class="btn btn-info btn-sm"
-                               href="{{route('dashboard.clients.orders.edit',[$client,$order])}}">@lang('operations.edit')
+                               href="{{route('dashboard.orders.edit',$order)}}">@lang('operations.edit')
                                 <i
                                     class="fa fa-edit"></i></a>
                         @else
@@ -123,7 +123,7 @@
                         @endif
 
                         @if(in_array('admins-delete',$userPermissions))
-                            <form action="{{ route('dashboard.clients.orders.destroy',[$client,$order]) }}"
+                            <form action="{{ route('dashboard.orders.destroy',$order) }}"
                                   method="post"
                                   style="display: inline-block">
                                 @csrf

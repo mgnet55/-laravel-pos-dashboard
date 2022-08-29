@@ -68,7 +68,7 @@
                     <td>
                         <a class="btn btn-default btn-sm {{in_array('products-read',$userPermissions)? '': 'disabled'}}"
                            href="{{ route('dashboard.products.index',['category'=>$category->id]) }}">@lang('site.products')
-                            <i class=" fa fa-tags"></i></a>
+                            <i class="glyphicon glyphicon-barcode"></i></a>
                     </td>
                     <td>
 

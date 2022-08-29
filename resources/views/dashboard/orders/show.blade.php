@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('breadcrumb')
-    <h1>@lang('site.order_details')</h1>
+    <h1>@lang('site.order_details')<small>({{$order->status}})</small></h1>
 
     <ol class="breadcrumb">
         <li><a href="{{route('dashboard.index')}}"><i class="fa fa-dashboard"></i> @lang('site.dashboard')
@@ -161,7 +161,7 @@
                     <tbody>
                     @foreach($order->products as $product)
                         <tr>
-                            <td>{{$loop->index}}</td>
+                            <td>{{$loop->index+1}}</td>
                             <td>{{$product->localized_name}}</td>
                             <td>${{$product->pivot->unit_price}}</td>
                             <td>{{$product->pivot->quantity}}</td>
